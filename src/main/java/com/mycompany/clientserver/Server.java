@@ -13,7 +13,7 @@ import java.util.logging.Logger;
 public class Server extends Thread
 {
     private ServerSocket Server;
-    private boolean status = false;
+    boolean status = false;
     
     Server(int porta) throws Exception
     {
@@ -21,7 +21,7 @@ public class Server extends Thread
             //istanzio oggetto Server
             Server = new ServerSocket(porta);
             System.out.println("Il Server è in attesa sulla porta selezionata.");           
-            //this.start();
+            this.start();
             //verifica conessione
         } catch (IOException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
@@ -33,9 +33,10 @@ public class Server extends Thread
     public void run()
     {
         //loop di attesa
-        while(!status)
+        while(status != true)
         {
-            try {               
+            System.out.println(this.isStatus());
+            try {   
                 System.out.println("In attesa di Connessione.");
                 //System.out.println(Server.accept());
                 //accetta conessione
@@ -47,5 +48,27 @@ public class Server extends Thread
             }
         catch(IOException e) {}
         }
+    }
+
+    public boolean isStatus() {
+        return status;
+    }
+    
+    public void stopServer(){
+        boolean stop = false;
+        setStatus(stop);
+    }
+    
+    public void restartServer(){
+        boolean start = true;
+        setStatus(start);
+    }
+    
+    public void killServer(){
+        this.interrupt();
+    }
+    
+    public void setStatus(boolean status) {
+        this.status = status;
     }
 }
