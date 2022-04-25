@@ -10,19 +10,14 @@ public class menagerServer {
 
     public static void main(String[] args) {
 
-        System.out.println("***********************");
-        System.out.println("Command Options: ");
-        System.out.println("a: Start Server");
-        System.out.println("b: Kill Server");
-        System.out.println("q: Quit");
-        System.out.println("***********************");
-
         String choice = null;
         Server server = null;
-        choice = inputTXT();
         boolean status = false;
-        
+        stampaMenu();
         do {
+            
+            System.out.println("INSERISCI DAL MENU: ");
+            choice = inputTXT();
             switch (choice) {
                 case "a" -> {
                     try {
@@ -34,22 +29,31 @@ public class menagerServer {
                     } catch (Exception ex) {
                         Logger.getLogger(menagerServer.class.getName()).log(Level.SEVERE, null, ex);
                     }
-                    System.out.println("SI POTRA CONTINUARE UNA VOLTA STABILITA LA CONESSIONE!!");
                 }
                 case "b" -> {
-                    server.stop();
+                    //utilizzo una "fleag" (status) annulla o conferma il ciclo di loop
+                    server.stopServer();
+                    System.out.println("SERVER IN PAUSA");
+                }
+                case "c" -> {
+                    server.restartServer();
+                    System.out.println("SERVER RIPARTITO");
+                }
+                case "d" -> {
+                    //usando interrupt() uccido il THREAD
+                    server.killServer();
+                    System.out.println("SERVER SPENTO");
                 }
                 default -> {
-                    status = true;    
+                    status = true;
                 }
             }
-        }while(status = true);
+        } while (status = true);
     }
 
     static String inputTXT() {
         String s = null;
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        System.out.println("INSERISCI : ");
         try {
             s = br.readLine();
         } catch (IOException e) {
@@ -68,5 +72,16 @@ public class menagerServer {
         }
         int intero = Integer.parseInt(s);
         return intero;
+    }
+
+    static void stampaMenu() {
+        System.out.println("***********************");
+        System.out.println("Command Options: ");
+        System.out.println("a: Start Server");
+        System.out.println("b: Pause Server");
+        System.out.println("c: Restart Server");
+        System.out.println("d: Kill Server");
+        System.out.println("q: Quit");
+        System.out.println("***********************");
     }
 }
